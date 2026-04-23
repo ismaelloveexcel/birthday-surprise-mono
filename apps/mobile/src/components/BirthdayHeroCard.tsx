@@ -9,19 +9,11 @@ interface Props {
     introLine: string;
   };
   visualStyleId: string;
+  paletteId: string;
 }
 
-export const BirthdayHeroCard: React.FC<Props> = ({ hero, visualStyleId }) => {
-  const paletteKey =
-    visualStyleId === "soft-party"
-      ? "cake-pop"
-      : visualStyleId === "night-glow"
-      ? "midnight-neon"
-      : visualStyleId === "scrapbook-pop"
-      ? "memory-collage"
-      : "gold-rose";
-
-  const palette = CURATED_PALETTES[paletteKey] ?? CURATED_PALETTES["cake-pop"];
+export const BirthdayHeroCard: React.FC<Props> = ({ hero, paletteId }) => {
+  const palette = CURATED_PALETTES[paletteId] ?? CURATED_PALETTES["cake-pop"];
 
   return (
     <View

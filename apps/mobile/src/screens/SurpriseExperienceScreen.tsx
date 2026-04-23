@@ -19,7 +19,7 @@ type NavProp = StackNavigationProp<RootStackParamList, "SurpriseExperience">;
 
 export const SurpriseExperienceScreen: React.FC = () => {
   const route = useRoute<ExperienceRoute>();
-  const { output, experienceId, unlocked } = route.params;
+  const { output, experienceId, unlocked, relationship } = route.params;
   const confettiRef = useRef<ConfettiCannon>(null);
   const [wowFired, setWowFired] = useState(false);
 
@@ -64,7 +64,11 @@ export const SurpriseExperienceScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 48 }}
       >
-        <BirthdayHeroCard hero={output.hero} visualStyleId={output.visualStyleId} />
+        <BirthdayHeroCard
+          hero={output.hero}
+          visualStyleId={output.visualStyleId}
+          paletteId={output.paletteId}
+        />
         <InteractionCard
           interaction={output.interaction}
           experienceId={experienceId}
@@ -80,7 +84,7 @@ export const SurpriseExperienceScreen: React.FC = () => {
         <RemixBar
           remixHook={output.share.remixHook}
           vibe={output.tone}
-          relationship=""
+          relationship={relationship}
           experienceId={experienceId}
         />
       </ScrollView>

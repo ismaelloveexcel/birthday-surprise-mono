@@ -22,7 +22,7 @@ type NavProp = StackNavigationProp<RootStackParamList, "SurprisePreview">;
 export const SurprisePreviewScreen: React.FC = () => {
   const route = useRoute<PreviewRoute>();
   const navigation = useNavigation<NavProp>();
-  const { output, experienceId } = route.params;
+  const { output, input, experienceId } = route.params;
   const [unlocking, setUnlocking] = useState(false);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export const SurprisePreviewScreen: React.FC = () => {
       const success = await mockPaymentSheet(2.99);
       if (!success) {
         Alert.alert("Payment cancelled", "You can unlock anytime.");
+        setUnlocking(false);
         return;
       }
       const { error } = await unlockExperience(experienceId);
@@ -45,6 +46,7 @@ export const SurprisePreviewScreen: React.FC = () => {
         output,
         experienceId,
         unlocked: true,
+        relationship: input.relationship,
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Unknown error";

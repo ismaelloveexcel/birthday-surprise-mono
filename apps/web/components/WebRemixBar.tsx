@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { trackEvent } from "../lib/analytics";
 
 interface Props {
@@ -14,15 +15,21 @@ export const WebRemixBar: React.FC<Props> = ({
   relationship,
   experienceId,
 }) => {
+  const [showFallback, setShowFallback] = useState(false);
+
   const handleRemix = async () => {
     await trackEvent(experienceId, "remix_clicked");
     const params = new URLSearchParams({ vibe, relationship });
     const deepLink = `birthdaysurprise://create?${params.toString()}`;
     window.location.href = deepLink;
-    // Fallback: if deep link didn't open the app after 600ms, show message
-    setTimeout(() => {
-      alert("Open the Birthday Surprise app to remix this experience!");
-    }, 600);
+    // Show a gentle inline prompt if the app isn't installed;
+    // hide it if the page loses visibility (app opened successfully).
+    const timeout = setTimeout(() => setShowFallback(true), 800);
+    const cancel = () => {
+      clearTimeout(timeout);
+      document.removeEventListener("visibilitychange", cancel);
+    };
+    document.addEventListener("visibilitychange", cancel);
   };
 
   return (
@@ -34,6 +41,11 @@ export const WebRemixBar: React.FC<Props> = ({
       >
         ✨ Remix this vibe
       </button>
+      {showFallback && (
+        <p className="text-gray-400 text-xs mt-3">
+          Get the Birthday Surprise app to remix this experience.
+        </p>
+      )}
     </div>
   );
 };

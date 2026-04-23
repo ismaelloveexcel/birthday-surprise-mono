@@ -2,15 +2,18 @@ import { createClient } from "@supabase/supabase-js";
 import Constants from "expo-constants";
 import type { SurpriseOutput, SurpriseInput, AnalyticsEventType } from "@birthday-surprise/shared";
 
+// Fall back to placeholder values so createClient doesn't throw when env vars
+// are not yet configured. Real operations will fail with a network error,
+// which is handled gracefully by each caller.
 const supabaseUrl: string =
   (Constants.expoConfig?.extra?.supabaseUrl as string) ||
   process.env.EXPO_PUBLIC_SUPABASE_URL ||
-  "";
+  "https://placeholder.supabase.co";
 
 const supabaseAnonKey: string =
   (Constants.expoConfig?.extra?.supabaseAnonKey as string) ||
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
-  "";
+  "placeholder-anon-key";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 

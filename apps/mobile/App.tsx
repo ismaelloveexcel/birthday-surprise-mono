@@ -21,6 +21,7 @@ export type RootStackParamList = {
     output: SurpriseOutput;
     experienceId: string;
     unlocked: boolean;
+    relationship: string;
   };
 };
 

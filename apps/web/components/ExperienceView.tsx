@@ -24,10 +24,10 @@ export const ExperienceView: React.FC<Props> = ({ experience, shareUrl }) => {
       <WebBirthdayHeroCard
         hero={experience.output.hero}
         visualStyleId={experience.output.visualStyleId}
+        paletteId={experience.output.paletteId}
       />
       <WebInteractionCard
         interaction={experience.output.interaction}
-        memoryMoment={experience.output.memoryMoment}
         experienceId={experience.id}
       />
       <WebMemoryMomentCard memoryMoment={experience.output.memoryMoment} />

@@ -62,16 +62,26 @@ export const InteractionCard: React.FC<Props> = ({
         return (
           <View>
             <Text style={styles.quizPrompt}>{interaction.prompt}</Text>
-            {(interaction.options ?? []).map((opt, idx) => (
+            {(interaction.options ?? []).length > 0 ? (
+              (interaction.options ?? []).map((opt, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={handleReveal}
+                  style={styles.optionButton}
+                  activeOpacity={0.75}
+                >
+                  <Text style={styles.optionText}>{opt}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
               <TouchableOpacity
-                key={idx}
                 onPress={handleReveal}
-                style={styles.optionButton}
-                activeOpacity={0.75}
+                style={styles.tapButton}
+                activeOpacity={0.8}
               >
-                <Text style={styles.optionText}>{opt}</Text>
+                <Text style={styles.tapButtonText}>Tap to reveal</Text>
               </TouchableOpacity>
-            ))}
+            )}
           </View>
         );
 

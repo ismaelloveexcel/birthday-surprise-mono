@@ -10,7 +10,6 @@ interface Props {
     options?: string[];
     revealText: string;
   };
-  memoryMoment: { title: string; body: string };
   experienceId: string;
 }
 
@@ -32,20 +31,30 @@ export const WebInteractionCard: React.FC<Props> = ({
       interaction.type === "mini_quiz" ||
       interaction.type === "choice_path"
     ) {
+      const opts = interaction.options ?? [];
       return (
         <div>
           <p className="text-center font-semibold text-gray-800 mb-4 text-lg">
             {interaction.prompt}
           </p>
-          {(interaction.options ?? []).map((opt, i) => (
+          {opts.length > 0 ? (
+            opts.map((opt, i) => (
+              <button
+                key={i}
+                onClick={handleReveal}
+                className="block w-full bg-gray-100 hover:bg-pink-50 transition text-left p-3 rounded-xl mb-2 text-gray-700"
+              >
+                {opt}
+              </button>
+            ))
+          ) : (
             <button
-              key={i}
               onClick={handleReveal}
-              className="block w-full bg-gray-100 hover:bg-pink-50 transition text-left p-3 rounded-xl mb-2 text-gray-700"
+              className="bg-pink-500 hover:bg-pink-600 transition text-white font-bold py-3 px-8 rounded-full mx-auto block"
             >
-              {opt}
+              Tap to reveal
             </button>
-          ))}
+          )}
         </div>
       );
     }
