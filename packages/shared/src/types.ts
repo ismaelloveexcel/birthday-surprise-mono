@@ -22,7 +22,7 @@ export const SurpriseInputSchema = z.object({
   recipientName: z.string().min(1),
   relationship: z.string().min(1),
   vibe: SurpriseVibeSchema,
-  memoryNote: z.string().min(1),
+  memoryNote: z.string().min(1).max(500),
 });
 export type SurpriseInput = z.infer<typeof SurpriseInputSchema>;
 

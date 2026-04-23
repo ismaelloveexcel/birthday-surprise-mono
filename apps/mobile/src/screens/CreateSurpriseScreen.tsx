@@ -52,7 +52,8 @@ export const CreateSurpriseScreen: React.FC = () => {
       const output = await generateBirthdaySurprise(parsed.data);
       const { id, error } = await saveExperience(output, parsed.data);
       if (error || !id) throw new Error(error ?? "Could not save experience");
-      await trackEvent(id, "experience_generated");
+      // Fire-and-forget — analytics must never block navigation
+      void trackEvent(id, "experience_generated");
       navigation.navigate("SurprisePreview", {
         output,
         input: parsed.data,
@@ -146,15 +147,21 @@ export const CreateSurpriseScreen: React.FC = () => {
 
         {/* Memory note */}
         <View className="mb-8">
-          <Text className="text-sm font-semibold text-gray-700 mb-1.5 uppercase tracking-wide">
-            One memory or inside joke
-          </Text>
+          <View className="flex-row justify-between items-center mb-1.5">
+            <Text className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+              One memory or inside joke
+            </Text>
+            <Text className="text-xs text-gray-400">
+              {input.memoryNote.length}/500
+            </Text>
+          </View>
           <TextInput
             className="border border-gray-200 rounded-2xl px-4 py-3.5 text-base text-gray-900 bg-gray-50"
             style={{ minHeight: 100, textAlignVertical: "top" }}
             placeholder="That karaoke night, the time they burned dinner, their obsession with bad movies…"
             placeholderTextColor="#9ca3af"
             multiline
+            maxLength={500}
             value={input.memoryNote}
             onChangeText={(t) => setInput({ ...input, memoryNote: t })}
           />

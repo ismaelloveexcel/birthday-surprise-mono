@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -24,9 +24,11 @@ export const SurprisePreviewScreen: React.FC = () => {
   const navigation = useNavigation<NavProp>();
   const { output, input, experienceId } = route.params;
   const [unlocking, setUnlocking] = useState(false);
+  const isMounted = useRef(true);
+  useEffect(() => () => { isMounted.current = false; }, []);
 
   useEffect(() => {
-    trackEvent(experienceId, "preview_viewed");
+    void trackEvent(experienceId, "preview_viewed");
   }, [experienceId]);
 
   const handleUnlock = async () => {
@@ -52,7 +54,7 @@ export const SurprisePreviewScreen: React.FC = () => {
       const msg = err instanceof Error ? err.message : "Unknown error";
       Alert.alert("Unlock failed", msg);
     } finally {
-      setUnlocking(false);
+      if (isMounted.current) setUnlocking(false);
     }
   };
 

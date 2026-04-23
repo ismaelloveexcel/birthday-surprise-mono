@@ -51,11 +51,15 @@ export async function trackEvent(
   eventType: AnalyticsEventType,
   metadata?: Record<string, unknown>
 ): Promise<void> {
-  await supabase.from("analytics").insert({
-    experience_id: experienceId,
-    event_type: eventType,
-    metadata: metadata ?? null,
-  });
+  try {
+    await supabase.from("analytics").insert({
+      experience_id: experienceId,
+      event_type: eventType,
+      metadata: metadata ?? null,
+    });
+  } catch {
+    // Analytics failures are non-fatal — never block the main flow
+  }
 }
 
 export function getShareUrl(experienceId: string): string {

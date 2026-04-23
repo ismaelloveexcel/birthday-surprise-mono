@@ -1,20 +1,25 @@
 import { createClient } from "@supabase/supabase-js";
+import type { AnalyticsEventType } from "@birthday-surprise/shared";
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key"
 );
 
 export async function trackEvent(
   experienceId: string,
-  eventType: string,
+  eventType: AnalyticsEventType,
   metadata?: Record<string, unknown>
 ): Promise<void> {
-  await supabase.from("analytics").insert({
-    experience_id: experienceId,
-    event_type: eventType,
-    metadata: metadata ?? null,
-  });
+  try {
+    await supabase.from("analytics").insert({
+      experience_id: experienceId,
+      event_type: eventType,
+      metadata: metadata ?? null,
+    });
+  } catch {
+    // Analytics failures are non-fatal — never block the main flow
+  }
 }
 
 /**

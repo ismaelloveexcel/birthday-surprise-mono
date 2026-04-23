@@ -1,6 +1,11 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Linking, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { StackNavigationProp } from "@react-navigation/stack";
+import type { RootStackParamList } from "../../App";
 import { trackEvent } from "../services/supabaseService";
+
+type NavProp = StackNavigationProp<RootStackParamList, "SurpriseExperience">;
 
 interface Props {
   remixHook: string;
@@ -11,20 +16,14 @@ interface Props {
 
 export const RemixBar: React.FC<Props> = ({
   remixHook,
-  vibe,
-  relationship,
   experienceId,
 }) => {
+  const navigation = useNavigation<NavProp>();
+
   const handleRemix = async () => {
-    await trackEvent(experienceId, "remix_clicked");
-    const params = new URLSearchParams({
-      vibe: vibe,
-      relationship: relationship,
-    });
-    const deepLink = `birthdaysurprise://create?${params.toString()}`;
-    Linking.openURL(deepLink).catch(() => {
-      // No-op: user doesn't have the app open — that's fine on mobile since we're IN the app
-    });
+    void trackEvent(experienceId, "remix_clicked");
+    // Navigate directly to the create screen — we're already in the app
+    navigation.navigate("CreateSurprise");
   };
 
   return (

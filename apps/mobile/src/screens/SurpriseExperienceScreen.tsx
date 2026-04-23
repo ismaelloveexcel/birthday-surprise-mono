@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import type { RouteProp } from "@react-navigation/native";
-import type { StackNavigationProp } from "@react-navigation/stack";
 import ConfettiCannon from "react-native-confetti-cannon";
 import * as Haptics from "expo-haptics";
 import type { RootStackParamList } from "../../App";
@@ -15,7 +14,6 @@ import { ShareBar } from "../components/ShareBar";
 import { RemixBar } from "../components/RemixBar";
 
 type ExperienceRoute = RouteProp<RootStackParamList, "SurpriseExperience">;
-type NavProp = StackNavigationProp<RootStackParamList, "SurpriseExperience">;
 
 export const SurpriseExperienceScreen: React.FC = () => {
   const route = useRoute<ExperienceRoute>();
@@ -25,7 +23,7 @@ export const SurpriseExperienceScreen: React.FC = () => {
 
   useEffect(() => {
     if (unlocked) {
-      trackEvent(experienceId, "experience_opened");
+      void trackEvent(experienceId, "experience_opened");
     }
   }, [experienceId, unlocked]);
 
