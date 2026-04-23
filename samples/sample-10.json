@@ -1,0 +1,13 @@
+{
+  "id": "sample-10",
+  "input": {
+    "recipientName": "Priya",
+    "relationship": "girlfriend",
+    "vibe": "warm",
+    "memoryNote": "I mentioned once — once — that I missed my grandmother's dal recipe. You found a YouTube tutorial, practiced it three times in one week, and made it for me on a random Tuesday without warning. I cried into the bowl. You pretended not to notice."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "sample-06",
+  "input": {
+    "recipientName": "Tyler",
+    "relationship": "boyfriend",
+    "vibe": "funny",
+    "memoryNote": "I found a Notes app list on your phone titled 'how to say it right'. Six months of private practice sessions for the word 'charcuterie' because you kept saying char-coo-terry at restaurants. I'm keeping that list forever."
+  },
+  "meta": {
+    "viralRank": 7,
+    "tiktokHook": "I found my boyfriend's Notes app. Six months of practicing 'charcuterie' in private. The list is titled 'how to say it right'. I love him so much."
+  }
+}

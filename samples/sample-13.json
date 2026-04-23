@@ -1,0 +1,13 @@
+{
+  "id": "sample-13",
+  "input": {
+    "recipientName": "Ben",
+    "relationship": "dad",
+    "vibe": "warm",
+    "memoryNote": "You once drove 45 minutes in the completely wrong direction because you were in the middle of telling me a story and didn't notice until we were in a different town. We ended up getting dinner there. That whole drive is one of my favorite memories."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

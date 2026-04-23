@@ -1,0 +1,13 @@
+{
+  "id": "sample-09",
+  "input": {
+    "recipientName": "Carmen",
+    "relationship": "work best friend",
+    "vibe": "funny",
+    "memoryNote": "We have spent a combined 340+ hours in the office kitchen complaining about the same three people. You are the only reason I didn't quit on week two. I've calculated this. The math is extremely concerning."
+  },
+  "meta": {
+    "viralRank": 10,
+    "tiktokHook": "My work wife and I have spent 340 hours in the office kitchen complaining about the same 3 people. I calculated it. She is the only reason I'm still employed."
+  }
+}

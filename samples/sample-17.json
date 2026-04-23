@@ -1,0 +1,13 @@
+{
+  "id": "sample-17",
+  "input": {
+    "recipientName": "Chloe",
+    "relationship": "best friend",
+    "vibe": "emotional",
+    "memoryNote": "I got food poisoning on my birthday in Barcelona. You held my hair back, ordered room service, put on a movie, and stayed the whole night. You turned what should have been the worst birthday into one of the best ones I've ever had."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

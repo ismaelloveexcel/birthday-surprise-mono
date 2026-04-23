@@ -1,0 +1,13 @@
+{
+  "id": "sample-25",
+  "input": {
+    "recipientName": "Chris",
+    "relationship": "best friend",
+    "vibe": "funny",
+    "memoryNote": "You showed up to our group Halloween costume party dressed as 'the concept of capitalism' wearing a suit with price tags zip-tied to every item including your tie, shoes, and your own face. There was a sticker on your forehead that said $4.99. You won. You always win."
+  },
+  "meta": {
+    "viralRank": 5,
+    "tiktokHook": "My best friend showed up to our costume party dressed as 'the concept of capitalism'. Suit. Price tags on everything. Sticker on his forehead: $4.99. He won. Obviously."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "sample-07",
+  "input": {
+    "recipientName": "Leah",
+    "relationship": "sister",
+    "vibe": "emotional",
+    "memoryNote": "You gave up your front-row concert ticket to stay home with me the week I got laid off and had a panic attack about it. You never once made me feel like a burden. You just sat with me and made pasta and we watched movies until 3am."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

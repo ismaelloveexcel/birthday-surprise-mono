@@ -1,0 +1,13 @@
+{
+  "id": "sample-05",
+  "input": {
+    "recipientName": "Jordan",
+    "relationship": "college roommate",
+    "vibe": "chaotic",
+    "memoryNote": "You ate an entire birthday cake standing over the kitchen sink at 4am, went to your 8am lecture as if nothing happened, and told no one. I watched the whole thing from the couch. You made eye contact with me and said nothing."
+  },
+  "meta": {
+    "viralRank": 6,
+    "tiktokHook": "My college roommate ate an entire birthday cake alone at 4am standing over the sink. Went to his 8am class. Told no one. I witnessed it. He never acknowledged it."
+  }
+}

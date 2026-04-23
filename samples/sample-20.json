@@ -1,0 +1,13 @@
+{
+  "id": "sample-20",
+  "input": {
+    "recipientName": "Sam",
+    "relationship": "best friend",
+    "vibe": "funny",
+    "memoryNote": "You texted me a live play-by-play of your entire first date from the bathroom. Seven bathroom trips in 90 minutes. I have the full transcript saved. It was the greatest piece of real-time disaster journalism I have ever received."
+  },
+  "meta": {
+    "viralRank": 8,
+    "tiktokHook": "My best friend texted me through her entire first date from the bathroom. 7 trips in 90 minutes. I have the full transcript. It reads like a nature documentary."
+  }
+}

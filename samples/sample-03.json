@@ -1,0 +1,13 @@
+{
+  "id": "sample-03",
+  "input": {
+    "recipientName": "Marcus",
+    "relationship": "brother",
+    "vibe": "playful",
+    "memoryNote": "You kept me believing in Santa until I was 12 by creating a Hotmail account called northpoledirect99@hotmail.com and sending typed email replies every December. I found out in high school and I still respect the commitment."
+  },
+  "meta": {
+    "viralRank": 4,
+    "tiktokHook": "My brother kept me believing in Santa until age 12 using a Hotmail account called northpoledirect99. That's 12 years of lies. Happy birthday to him."
+  }
+}

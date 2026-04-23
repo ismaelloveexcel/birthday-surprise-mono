@@ -1,0 +1,13 @@
+{
+  "id": "sample-18",
+  "input": {
+    "recipientName": "Rafi",
+    "relationship": "best friend",
+    "vibe": "playful",
+    "memoryNote": "We have had the exact same argument about whether a hot dog is a sandwich for eight years running. We have consulted a lawyer, a chef, a philosopher, and Reddit. We are no closer to resolution. I will see you in hell, Rafi."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

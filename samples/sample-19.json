@@ -1,0 +1,13 @@
+{
+  "id": "sample-19",
+  "input": {
+    "recipientName": "Olivia",
+    "relationship": "mom",
+    "vibe": "emotional",
+    "memoryNote": "You worked the night shift so I could afford to go on the school trip to Washington DC. You never told me. You just said 'things worked out'. I found out years later from Grandma. You never wanted credit for any of it."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

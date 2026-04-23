@@ -1,0 +1,13 @@
+{
+  "id": "sample-02",
+  "input": {
+    "recipientName": "Sofia",
+    "relationship": "girlfriend",
+    "vibe": "emotional",
+    "memoryNote": "After my dad's surgery you drove 3 hours at 2am just to sit with me in the hospital parking lot eating vending machine chips without saying a single word. You didn't need to say anything."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "sample-12",
+  "input": {
+    "recipientName": "Grace",
+    "relationship": "wife",
+    "vibe": "emotional",
+    "memoryNote": "You rehearsed your proposal speech for three weeks. When the moment came you forgot every single word. You just looked at me and said 'I can't do this without you' and started crying. That was better than anything you had prepared."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

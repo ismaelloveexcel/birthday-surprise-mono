@@ -1,0 +1,13 @@
+{
+  "id": "sample-08",
+  "input": {
+    "recipientName": "Andre",
+    "relationship": "best friend",
+    "vibe": "bold",
+    "memoryNote": "You quit your finance job on a Tuesday, texted me just 'I'm doing it', and by Friday you had signed a lease on a food truck. I watched you build the whole thing from zero in real time. That was the bravest thing I've ever seen a person do."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

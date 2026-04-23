@@ -1,0 +1,13 @@
+{
+  "id": "sample-01",
+  "input": {
+    "recipientName": "Emma",
+    "relationship": "best friend",
+    "vibe": "funny",
+    "memoryNote": "You spent $47 at a gas station buying scratch tickets in bulk during our Vegas trip, won $5, declared it 'the greatest ROI of your life', and actually framed the receipt when you got home."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

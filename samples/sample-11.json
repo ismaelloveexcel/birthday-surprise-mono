@@ -1,0 +1,13 @@
+{
+  "id": "sample-11",
+  "input": {
+    "recipientName": "Noah",
+    "relationship": "cousin",
+    "vibe": "playful",
+    "memoryNote": "You still owe me $8 from the GameStop trade-in in 2011. I have not forgotten. I tracked the inflation. It is now $11.62 with compound interest. I want it in cash. Happy birthday."
+  },
+  "meta": {
+    "viralRank": 2,
+    "tiktokHook": "I will never forget the $8. Happy birthday to my cousin. He still owes me. It's $11.62 with inflation. I will collect."
+  }
+}

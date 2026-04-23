@@ -1,0 +1,13 @@
+{
+  "id": "sample-04",
+  "input": {
+    "recipientName": "Diana",
+    "relationship": "mom",
+    "vibe": "warm",
+    "memoryNote": "Every year without fail you still cut my sandwiches in triangles when I visit home. I'm 27. You do it because you know it makes me feel like a kid again. You've never once mentioned it."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

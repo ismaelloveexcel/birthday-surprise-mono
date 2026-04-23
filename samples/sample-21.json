@@ -1,0 +1,13 @@
+{
+  "id": "sample-21",
+  "input": {
+    "recipientName": "Dev",
+    "relationship": "college friend",
+    "vibe": "warm",
+    "memoryNote": "You used to leave Post-it notes with motivational quotes outside my dorm room before finals week every semester. You never mentioned it. I kept every single one. They're in a stack in a drawer at home. I never told you that until now."
+  },
+  "meta": {
+    "viralRank": null,
+    "tiktokHook": null
+  }
+}

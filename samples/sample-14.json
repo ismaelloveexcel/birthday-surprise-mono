@@ -1,0 +1,13 @@
+{
+  "id": "sample-14",
+  "input": {
+    "recipientName": "Zoe",
+    "relationship": "best friend",
+    "vibe": "chaotic",
+    "memoryNote": "You convinced an entire Airbnb house full of strangers to celebrate your birthday with us by simply announcing it was your birthday and producing a full birthday cake from your backpack. Nobody questioned where the cake came from. You always have a cake."
+  },
+  "meta": {
+    "viralRank": 1,
+    "tiktokHook": "POV: your best friend produced a full birthday cake from her backpack in a stranger's Airbnb and somehow convinced everyone to celebrate. Nobody asked where the cake came from."
+  }
+}
