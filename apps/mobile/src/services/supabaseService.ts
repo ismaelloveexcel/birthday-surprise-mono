@@ -1,0 +1,64 @@
+import { createClient } from "@supabase/supabase-js";
+import Constants from "expo-constants";
+import type { SurpriseOutput, SurpriseInput, AnalyticsEventType } from "@birthday-surprise/shared";
+
+const supabaseUrl: string =
+  (Constants.expoConfig?.extra?.supabaseUrl as string) ||
+  process.env.EXPO_PUBLIC_SUPABASE_URL ||
+  "";
+
+const supabaseAnonKey: string =
+  (Constants.expoConfig?.extra?.supabaseAnonKey as string) ||
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
+  "";
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+export async function saveExperience(
+  output: SurpriseOutput,
+  input: SurpriseInput
+): Promise<{ id: string | null; error: string | null }> {
+  const { data, error } = await supabase
+    .from("experiences")
+    .insert({
+      output,
+      unlocked: false,
+      recipient_name: input.recipientName,
+      relationship: input.relationship,
+      vibe: input.vibe,
+    })
+    .select("id")
+    .single();
+  if (error) return { id: null, error: error.message };
+  return { id: (data as { id: string }).id, error: null };
+}
+
+export async function unlockExperience(
+  experienceId: string
+): Promise<{ error: string | null }> {
+  const { error } = await supabase
+    .from("experiences")
+    .update({ unlocked: true })
+    .eq("id", experienceId);
+  return { error: error?.message ?? null };
+}
+
+export async function trackEvent(
+  experienceId: string,
+  eventType: AnalyticsEventType,
+  metadata?: Record<string, unknown>
+): Promise<void> {
+  await supabase.from("analytics").insert({
+    experience_id: experienceId,
+    event_type: eventType,
+    metadata: metadata ?? null,
+  });
+}
+
+export function getShareUrl(experienceId: string): string {
+  const baseUrl: string =
+    (Constants.expoConfig?.extra?.webBaseUrl as string) ||
+    process.env.EXPO_PUBLIC_WEB_BASE_URL ||
+    "http://localhost:3000";
+  return `${baseUrl}/e/${experienceId}`;
+}
