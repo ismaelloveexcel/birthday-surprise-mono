@@ -4,10 +4,12 @@
     "recipientName": "Andre",
     "relationship": "best friend",
     "vibe": "bold",
-    "memoryNote": "You quit your finance job on a Tuesday, texted me just 'I'm doing it', and by Friday you had signed a lease on a food truck. I watched you build the whole thing from zero in real time. That was the bravest thing I've ever seen a person do."
+    "memoryNote": "You quit your job on a Tuesday with no plan and texted me just 'I'm doing it.' By Thursday you'd named the food truck. Saturday you were parked outside a farmers market charging $14 for tacos you'd never made before. Sold out by noon. You called me after and your voice was shaking. That's the only time I've ever heard you sound genuinely scared and genuinely alive at the same time."
   },
   "meta": {
-    "viralRank": null,
-    "tiktokHook": null
+    "viralRank": 8,
+    "tiktokHook": "My best friend quit his finance job on a Tuesday, named a food truck by Thursday, sold out at a farmers market Saturday making tacos he'd never cooked before. His voice was shaking when he called me.",
+    "caption": "scared and alive at the same time",
+    "whyItWorks": "'Scared and alive at the same time' is a line. Tuesday/Thursday/Saturday timeline gives story structure. Aspirational but grounded — shows real fear alongside real action."
   }
 }
