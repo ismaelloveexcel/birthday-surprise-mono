@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*"],
+  "globalDependencies": ["**/.env.*", "**/.env"],
   "tasks": {
     "dev": {
       "dependsOn": ["^build"],
@@ -9,10 +9,22 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**"]
+      "outputs": [".next/**", "dist/**", "!.next/cache/**"]
     },
     "type-check": {
       "dependsOn": ["^build"]
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    }
+  },
+  "pipeline": {
+    "shared#build": {},
+    "web#build": {
+      "dependsOn": ["shared#build"]
+    },
+    "mobile#build": {
+      "dependsOn": ["shared#build"]
     }
   }
 }

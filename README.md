@@ -1,173 +1,133 @@
-# Birthday Surprise Experience
+# Birthday Surprise Mono
 
-Turn one memory into a birthday surprise they'll actually remember.
-
-## Architecture
-
-```
-birthday-surprise-mono/
-├── apps/
-│   ├── mobile/          # Expo React Native — primary product
-│   └── web/             # Next.js 14 — public share pages only
-├── packages/
-│   └── shared/          # Types, constants, prompt builders (Zod)
-├── supabase/
-│   └── schema.sql       # Run in Supabase SQL editor
-├── scripts/
-│   └── generate-samples.js
-├── turbo.json
-├── pnpm-workspace.yaml
-└── .env.example
-```
+AI-powered birthday experience generator — production-ready monorepo.
 
 ## Stack
 
 | Layer | Tech |
 |---|---|
-| Mobile (primary) | Expo 50, React Native, NativeWind, Reanimated 3 |
-| Web (share pages) | Next.js 14 App Router, Tailwind CSS |
-| Shared types | TypeScript, Zod |
-| Database | Supabase (Postgres + JSONB) |
-| AI | Anthropic Claude / OpenAI (mock mode by default) |
-| OG Images | @vercel/og |
-| Payments | Mock (Stripe/RevenueCat ready) |
-| Analytics | Supabase analytics table |
+| Mobile (primary) | Expo 50 + React Native + NativeWind |
+| Web (share pages) | Next.js 14 App Router + Tailwind CSS |
+| Database | Supabase (Postgres + JSONB + RLS) |
+| AI Pipeline | Anthropic Claude (`claude-sonnet-4-20250514`) |
+| Payments | Stripe (React Native + server-side intents) |
+| Deployment | Vercel (web) + EAS (mobile) |
+
+## Pricing
+
+| Tier | Price | Includes |
+|---|---|---|
+| Single | $7.99 | 1 AI experience + permanent share URL |
+| Premium | $14.99 | All above + voice narration + extended length + music mood + scheduled delivery |
+| Group | $19.99 | Up to 5 contributors, AI weaves all memories into one |
+
+All prices are defined in `packages/shared/src/pricing.ts` — **never hardcoded in components.**
+
+## Architecture: AI Pipeline
+
+```
+Mobile → POST /api/generate (Next.js server)
+           └── Step 0: Input Enhancer     (claude-sonnet-4-20250514)
+           └── Step A: Creative Strategist (claude-sonnet-4-20250514)
+           └── Step B: Experience Writer   (claude-sonnet-4-20250514)
+           └── Step C: Quality Gate        (claude-sonnet-4-20250514)
+                         └── score ≥ 7.5 → return result
+                         └── score < 7.5 → re-run full pipeline (max 2 attempts)
+                         └── still < 7.5 → return best result, quality_flag = true
+```
+
+Step B **never** receives raw `memoryNote` — only the Step 0 enhanced version.
+`ANTHROPIC_API_KEY` lives on the server only — never in the mobile bundle.
 
 ## Quick Start
 
-### 1. Install
+### 1. Clone & install
 
 ```bash
+git clone https://github.com/ismaelloveexcel/birthday-surprise-mono
+cd birthday-surprise-mono
 pnpm install
 ```
 
-### 2. Configure environment
+### 2. Set environment variables
 
 ```bash
-cp .env.example .env.local
-# Fill in NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+cp .env.example .env
+# Fill in all values — see .env.example for descriptions
 ```
 
-Copy the same values into `apps/mobile/.env.local`:
+Required variables:
+- `ANTHROPIC_API_KEY` — from console.anthropic.com
+- `STRIPE_SECRET_KEY` — from dashboard.stripe.com (test: `sk_test_...`)
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` — from Stripe dashboard
+- `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` — from supabase.com
+- `SUPABASE_SERVICE_ROLE_KEY` — from Supabase project settings
+- `NEXT_PUBLIC_BASE_URL` — your Vercel deployment URL
 
-```
-EXPO_PUBLIC_SUPABASE_URL=...
-EXPO_PUBLIC_SUPABASE_ANON_KEY=...
-EXPO_PUBLIC_WEB_BASE_URL=http://localhost:3000
-```
-
-### 3. Supabase setup
-
-1. Create a project at [supabase.com](https://supabase.com)
-2. Open **SQL Editor** and run `supabase/schema.sql`
-
-### 4. Build shared package
+### 3. Apply Supabase migration
 
 ```bash
-cd packages/shared
-pnpm build
-cd ../..
+# Option A: Supabase CLI
+supabase db push
+
+# Option B: SQL Editor
+# Paste contents of supabase/migrations/001_production_hardening.sql
 ```
 
-### 5. Run dev servers
+### 4. Deploy web (Vercel)
 
 ```bash
-# Both apps
-pnpm dev
-
-# Or individually
-pnpm dev:mobile   # Expo at http://localhost:8081
-pnpm dev:web      # Next.js at http://localhost:3000
+vercel --prod
+# Or via GitHub integration — push to main
 ```
 
-### 6. Generate sample experiences (optional)
+Vercel build settings:
+- Framework: Next.js
+- Root directory: `apps/web`
+- Build command: `cd ../.. && pnpm build --filter=web`
+- Output: `.next`
 
-```bash
-pnpm generate:samples
-```
+### 5. Build mobile (EAS)
 
-## Key Flows
-
-### Creator flow (mobile)
-1. Enter 4 inputs: `recipientName`, `relationship`, `vibe`, `memoryNote`
-2. AI pipeline generates a personalised experience (mock by default)
-3. Blurred preview is shown
-4. Tap "Unlock for $2.99" → mock payment → full experience unlocked
-5. Permanent share URL: `https://yourdomain.com/e/{id}`
-
-### Viewer flow (web)
-1. Recipient opens share URL `/e/{id}`
-2. Sees full experience: hero → interaction → memory → final wish
-3. Confetti on interaction reveal
-4. Share bar and remix bar visible
-
-### AI Pipeline
-- **Step 0** — Input Enhancer: sharpens the memory note
-- **Step A** — Creative Strategist: picks style, tone, interaction type
-- **Step B** — Experience Writer: writes all copy
-- **Step C** — Quality Gate: scores 1-10; regenerates if overall < 7.5
-
-## AI Setup
-
-Set one of these in `.env.local`:
-
-```
-ANTHROPIC_API_KEY=sk-ant-...
-# or
-OPENAI_API_KEY=sk-...
-```
-
-Without a key, the app runs in **mock mode** with high-quality sample responses.
-
-## Payments
-
-Currently mocked in `apps/mobile/src/services/paymentService.ts`.
-
-To integrate Stripe, replace `mockPaymentSheet()` with Stripe React Native SDK calls.
-
-## Analytics
-
-Events tracked: `experience_generated`, `preview_viewed`, `payment_started`, `payment_success`, `experience_opened`, `interaction_completed`, `share_clicked`, `remix_clicked`
-
-Remix rate SQL:
-```sql
-SELECT
-  experience_id,
-  COUNT(*) FILTER (WHERE event_type = 'remix_clicked') AS remixes,
-  COUNT(*) FILTER (WHERE event_type = 'experience_opened') AS opens,
-  ROUND(
-    COUNT(*) FILTER (WHERE event_type = 'remix_clicked')::numeric /
-    NULLIF(COUNT(*) FILTER (WHERE event_type = 'experience_opened'), 0), 4
-  ) AS remix_rate
-FROM analytics
-GROUP BY experience_id
-ORDER BY remix_rate DESC NULLS LAST;
-```
-
-## Deploy
-
-**Web (Vercel):** Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_BASE_URL` in the Vercel dashboard.
-
-**Mobile (EAS):**
 ```bash
 cd apps/mobile
-eas build -p ios
-eas build -p android
+eas build --platform all --profile production
+eas submit --platform all
 ```
+
+EAS build is required for `@stripe/stripe-react-native` native modules.
+
+---
 
 ## Launch Checklist
 
-- [ ] Supabase project created and `schema.sql` applied
-- [ ] `.env.local` configured with Supabase credentials
-- [ ] `pnpm install` + `packages/shared` built
-- [ ] Mobile app runs: `pnpm dev:mobile`
-- [ ] Web app runs: `pnpm dev:web`
-- [ ] Enter 4 inputs → surprise generates
-- [ ] Preview shows blur + "Unlock for $2.99"
-- [ ] Mock payment → full experience unlocks
-- [ ] Share URL opens on web and renders correctly
-- [ ] Interaction tap triggers confetti + haptics
-- [ ] Remix button triggers deep link
-- [ ] Analytics events appear in Supabase
-- [ ] `pnpm generate:samples` populates launch content
-AI-powered birthday surprise generator with shareable experiences, remix loop, and viral growth system
+- [ ] `ANTHROPIC_API_KEY` set in Vercel env vars — app throws on missing
+- [ ] `STRIPE_SECRET_KEY` + `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` set
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` set (server-side only)
+- [ ] `NEXT_PUBLIC_BASE_URL` set to production Vercel URL
+- [ ] `EXPO_PUBLIC_WEB_BASE_URL` set to same production URL (for mobile API calls)
+- [ ] Supabase migration `001_production_hardening.sql` applied
+- [ ] Stripe webhook configured: `POST /api/stripe-webhook` (add route if using webhooks)
+- [ ] EAS build complete with Stripe native module
+- [ ] `eas.json` configured with production credentials
+- [ ] RLS policies verified: unauthenticated cannot list all experiences
+- [ ] OG images render correctly at `/e/{id}/opengraph-image`
+- [ ] Test full flow: Create → Generate → Tier Select → Stripe payment → Experience view
+- [ ] Verify `$2.99` does not appear anywhere (`grep -r "2\.99" apps/`)
+- [ ] Verify prices only from `packages/shared/src/pricing.ts`
+- [ ] Arabic locale renders RTL on web viewer
+- [ ] Group Mode: 5 contributors woven into one experience
+
+## Regional Support
+
+| Region | Key Markets | Language | Currency |
+|---|---|---|---|
+| `gulf_mena` | UAE, Saudi, Qatar | Arabic / English | AED |
+| `south_asia` | India, Pakistan, Sri Lanka | Hindi / English | USD |
+| `indian_ocean` | Mauritius, Réunion | French / Creole | MUR |
+| `sub_saharan_africa` | Nigeria, Kenya, Ghana | English | USD |
+| `western_europe` | UK, France, Germany | English / French | USD |
+| `north_america` | USA, Canada | English | USD |
+| `southeast_asia` | Philippines, Indonesia | English | USD |
+
+All regional rules in `packages/shared/src/regionalRules.ts`.

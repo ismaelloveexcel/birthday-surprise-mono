@@ -13,6 +13,7 @@
     "@birthday-surprise/shared": "workspace:*",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/stack": "^6.3.20",
+    "@stripe/stripe-react-native": "^0.37.2",
     "@supabase/supabase-js": "^2.39.0",
     "expo": "~50.0.0",
     "expo-blur": "~12.8.0",

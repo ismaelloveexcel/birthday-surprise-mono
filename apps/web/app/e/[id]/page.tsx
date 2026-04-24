@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import type { Metadata } from "next";
 import type { StoredExperience } from "@birthday-surprise/shared";
+import { isRTL } from "@birthday-surprise/shared";
 import { ExperienceView } from "../../../components/ExperienceView";
 
 const supabase = createClient(
@@ -15,18 +16,29 @@ async function getExperience(id: string): Promise<StoredExperience | null> {
     .select("*")
     .eq("id", id)
     .single();
+
   if (error || !data) return null;
-  // Supabase stores the JSON columns merged at top-level; re-shape for type safety
+
   const row = data as Record<string, unknown>;
   const output = row.output as StoredExperience["output"];
+
   return {
     id: row.id as string,
     created_at: row.created_at as string,
     output,
-    unlocked: row.unlocked as boolean,
-    recipient_name: row.recipient_name as string,
-    relationship: row.relationship as string,
+    paid: (row.paid as boolean) ?? false,
+    tier: (row.tier as StoredExperience["tier"]) ?? "single",
+    unlocked: (row.unlocked as boolean) ?? false,
+    quality_flag: (row.quality_flag as boolean) ?? false,
+    recipient_name: (row.recipient_name as string) ?? "",
+    relationship: (row.relationship as string) ?? "",
     vibe: row.vibe as StoredExperience["vibe"],
+    locale: (row.locale as StoredExperience["locale"]) ?? "en",
+    region: (row.region as StoredExperience["region"]) ?? "north_america",
+    share_count: (row.share_count as number) ?? 0,
+    unlock_at: (row.unlock_at as string | null) ?? null,
+    recipient_birthday: (row.recipient_birthday as string | null) ?? null,
+    contributors: (row.contributors as StoredExperience["contributors"]) ?? [],
   };
 }
 
@@ -39,16 +51,19 @@ export async function generateMetadata({
   if (!experience) {
     return { title: "Birthday Surprise" };
   }
+
+  const recipientName = experience.recipient_name;
   const headline = experience.output.hero.headline;
   const sub = experience.output.hero.subheadline;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://yourdomain.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ?? "https://yourdomain.com";
   const ogUrl = `${baseUrl}/e/${params.id}/opengraph-image`;
 
   return {
-    title: headline,
+    title: `${recipientName}'s Birthday Surprise`,
     description: sub,
     openGraph: {
-      title: headline,
+      title: `${recipientName}'s Birthday Surprise — ${headline}`,
       description: sub,
       images: [{ url: ogUrl, width: 1200, height: 630 }],
       url: `${baseUrl}/e/${params.id}`,
@@ -56,7 +71,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: headline,
+      title: `${recipientName}'s Birthday Surprise`,
       description: sub,
       images: [ogUrl],
     },
@@ -71,6 +86,29 @@ export default async function ExperiencePage({
   const experience = await getExperience(params.id);
   if (!experience) notFound();
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/e/${params.id}`;
-  return <ExperienceView experience={experience} shareUrl={shareUrl} />;
+  const shareUrl = `${
+    process.env.NEXT_PUBLIC_BASE_URL ?? ""
+  }/e/${params.id}`;
+
+  // RTL support — set dir on the wrapper, not the html element (SSR safe)
+  const rtl = isRTL(experience.locale);
+
+  // Scheduled delivery gate — check server-side
+  const now = new Date();
+  const unlockAt = experience.unlock_at ? new Date(experience.unlock_at) : null;
+  const isTimeGated = unlockAt !== null && unlockAt > now;
+  const secondsUntilUnlock = isTimeGated
+    ? Math.ceil((unlockAt!.getTime() - now.getTime()) / 1000)
+    : 0;
+
+  return (
+    <div dir={rtl ? "rtl" : "ltr"}>
+      <ExperienceView
+        experience={experience}
+        shareUrl={shareUrl}
+        isTimeGated={isTimeGated}
+        secondsUntilUnlock={secondsUntilUnlock}
+      />
+    </div>
+  );
 }

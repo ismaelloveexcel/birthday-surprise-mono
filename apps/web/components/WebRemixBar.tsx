@@ -1,6 +1,12 @@
 "use client";
 import { useState } from "react";
 import { trackEvent } from "../lib/analytics";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://placeholder.supabase.co",
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "placeholder-anon-key"
+);
 
 interface Props {
   remixHook: string;
@@ -18,13 +24,18 @@ export const WebRemixBar: React.FC<Props> = ({
   const [showFallback, setShowFallback] = useState(false);
 
   const handleRemix = async () => {
-    await trackEvent(experienceId, "remix_clicked");
+    // Fire-and-forget: analytics + share_count increment
+    void trackEvent(experienceId, "remix_clicked");
+    void supabase.rpc("increment_share_count", {
+      experience_id: experienceId,
+    });
+
     const params = new URLSearchParams({ vibe, relationship });
     const deepLink = `birthdaysurprise://create?${params.toString()}`;
     window.location.href = deepLink;
-    // Show a gentle inline prompt if the app isn't installed;
-    // hide it if the page loses visibility (app opened successfully).
-    const timeout = setTimeout(() => setShowFallback(true), 800);
+
+    // Show store fallback if app not installed
+    const timeout = setTimeout(() => setShowFallback(true), 900);
     const cancel = () => {
       clearTimeout(timeout);
       document.removeEventListener("visibilitychange", cancel);

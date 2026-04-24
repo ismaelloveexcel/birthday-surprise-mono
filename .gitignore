@@ -47,3 +47,4 @@ yarn-error.log*
 
 # Nested repo (stray clone)
 birthday-surprise-mono/
+.env

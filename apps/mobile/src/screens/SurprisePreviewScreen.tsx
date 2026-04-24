@@ -1,11 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+/**
+ * Surprise Preview Screen.
+ * Shows a blurred preview of the experience.
+ * Navigates to TierSelectionScreen for payment.
+ * Pricing comes from packages/shared/src/pricing.ts only.
+ */
+import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Alert,
-  ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import { BlurView } from "expo-blur";
@@ -13,8 +17,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import type { RouteProp } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RootStackParamList } from "../../App";
-import { unlockExperience, trackEvent } from "../services/supabaseService";
-import { mockPaymentSheet } from "../services/paymentService";
+import { trackEvent } from "../services/supabaseService";
+import { TIER_DEFINITIONS } from "@birthday-surprise/shared";
 
 type PreviewRoute = RouteProp<RootStackParamList, "SurprisePreview">;
 type NavProp = StackNavigationProp<RootStackParamList, "SurprisePreview">;
@@ -23,7 +27,6 @@ export const SurprisePreviewScreen: React.FC = () => {
   const route = useRoute<PreviewRoute>();
   const navigation = useNavigation<NavProp>();
   const { output, input, experienceId } = route.params;
-  const [unlocking, setUnlocking] = useState(false);
   const isMounted = useRef(true);
   useEffect(() => () => { isMounted.current = false; }, []);
 
@@ -31,32 +34,17 @@ export const SurprisePreviewScreen: React.FC = () => {
     void trackEvent(experienceId, "preview_viewed");
   }, [experienceId]);
 
-  const handleUnlock = async () => {
-    setUnlocking(true);
-    try {
-      await trackEvent(experienceId, "payment_started");
-      const success = await mockPaymentSheet(2.99);
-      if (!success) {
-        Alert.alert("Payment cancelled", "You can unlock anytime.");
-        setUnlocking(false);
-        return;
-      }
-      const { error } = await unlockExperience(experienceId);
-      if (error) throw new Error(error);
-      await trackEvent(experienceId, "payment_success");
-      navigation.replace("SurpriseExperience", {
-        output,
-        experienceId,
-        unlocked: true,
-        relationship: input.relationship,
-      });
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Unknown error";
-      Alert.alert("Unlock failed", msg);
-    } finally {
-      if (isMounted.current) setUnlocking(false);
-    }
+  const handleGoToTiers = () => {
+    navigation.navigate("TierSelection", {
+      output,
+      input,
+      experienceId,
+      qualityFlag: false,
+    });
   };
+
+  // Show starting price from pricing.ts — never hardcoded
+  const startingPrice = TIER_DEFINITIONS.single.displayUSD;
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -81,7 +69,6 @@ export const SurprisePreviewScreen: React.FC = () => {
           style={StyleSheet.absoluteFillObject}
           pointerEvents="none"
         />
-        {/* Watermark */}
         <View style={styles.watermark} pointerEvents="none">
           <Text style={styles.watermarkText}>🔒 Preview</Text>
         </View>
@@ -92,30 +79,21 @@ export const SurprisePreviewScreen: React.FC = () => {
         <Text className="text-center text-2xl font-bold text-gray-900 mb-2">
           Unlock the full surprise
         </Text>
-        <Text className="text-center text-gray-500 mb-6 text-base">
+        <Text className="text-center text-gray-500 mb-2 text-base">
           Permanent share link, full experience, shareable & remixable.
+        </Text>
+        <Text className="text-center text-gray-400 text-sm mb-6">
+          Starting from {startingPrice}
         </Text>
 
         <TouchableOpacity
-          onPress={handleUnlock}
-          disabled={unlocking}
-          className={`rounded-2xl py-4 items-center mb-3 ${
-            unlocking ? "bg-green-300" : "bg-green-500"
-          }`}
+          onPress={handleGoToTiers}
+          className="rounded-2xl py-4 items-center mb-3 bg-green-500"
           activeOpacity={0.85}
         >
-          {unlocking ? (
-            <View className="flex-row items-center">
-              <ActivityIndicator color="white" size="small" />
-              <Text className="text-white font-bold text-lg ml-2">
-                Processing…
-              </Text>
-            </View>
-          ) : (
-            <Text className="text-white font-bold text-lg">
-              Unlock for $2.99 →
-            </Text>
-          )}
+          <Text className="text-white font-bold text-lg">
+            Choose a plan →
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity

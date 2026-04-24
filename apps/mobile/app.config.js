@@ -15,6 +15,10 @@ export default {
     ios: {
       supportsTablet: false,
       bundleIdentifier: "com.birthdaysurprise.app",
+      infoPlist: {
+        // Required by Stripe iOS SDK
+        NSCameraUsageDescription: "Required to scan card numbers",
+      },
     },
     android: {
       package: "com.birthdaysurprise.app",
@@ -24,10 +28,14 @@ export default {
       },
     },
     scheme: "birthdaysurprise",
+    plugins: ["@stripe/stripe-react-native"],
     extra: {
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
-      webBaseUrl: process.env.EXPO_PUBLIC_WEB_BASE_URL || "http://localhost:3000",
+      webBaseUrl:
+        process.env.EXPO_PUBLIC_WEB_BASE_URL || "http://localhost:3000",
+      // Publishable key is safe to bundle — never put STRIPE_SECRET_KEY here
+      stripePublishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     },
   },
 };
